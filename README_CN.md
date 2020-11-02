@@ -1,21 +1,21 @@
 ﻿# Mydump2oss
 
-Mydump2oss is a tool to upload local files (like mysql-backups) to MiIo, S3, Azure, Google Cloud Storage. You can set the authentication configurations with `cfg` or use --config to specify the authentication configuration file.
+Mydump2oss 是一个将MySQL数据库备份上传到MinIo，S3，Azure等云存储的工具。具体云服务认证信息可用`cfg`指令设置，或用--config指定保存有云服务认证信息的文件。
 
-## Features
+## 功能 
 
-* upload files to multiple Cloud Storage
-* upload files with little memory-space occupied
+* 上传备份文件到云对象存储
+* 支持本地盘空间较小的情况下一次性上传(非分批)
 
-## Prerequisites
+## 前提
 
-* local files like mysql-backups
-* MinIo，S3，Azure Cloud Storage Service
+* mydumper 导出的数据库备份
+* MinIo，S3，Azure等云存储服务
 
-## Description 
-On linux, use other tools (like Mydumper) to prepare files, then upload files to Cloud Storage. Also, you can use linux crontab to run this work periodically.
+## 说明
+Linux下，使用Mydumper备份mysql等数据库并压缩，接着Mydump2oss工具将压缩后的备份文件上传到MinIo，S3，Azure等的云对象存储中。可使用crontab定制job，定时备份数据库到云存储。
 
-## Work flow
+## 工作流
 
 <!--                     +------------+                                            
      +------+  data  |  Mydumper  | data.gz  +------------+ data.gz  +----------------+   
@@ -25,7 +25,7 @@ On linux, use other tools (like Mydumper) to prepare files, then upload files to
 
 ![flow](README.png)
 
-## Usage
+## 用法
     
     shieber@Kew:files 🐁  Mydump2oss --help
     Mydump2oss, a tool to upload files to MinIo/S3... Cloud Storage
@@ -71,11 +71,11 @@ On linux, use other tools (like Mydumper) to prepare files, then upload files to
           --config string   Config file to store Cloud Storage Authentication Info.
 
 
-## Detaild cmd usages
-[cfg](docs/cfg.md)
-[cp](docs/cp.md)
-[ls](docs/ls.md)
-[mb](docs/mb.md)
-[mr](docs/mr.md)
-[rmb](docs/rmb.md)
-[rmo](docs/rmo.md)
+## 各指令详细用法
+[cfg](docs/cfg.md) 
+[cp](docs/cp.md) 
+[ls](docs/ls.md) 
+[mb](docs/mb.md) 
+[mr](docs/mr.md) 
+[rmb](docs/rmb.md) 
+[rmo](docs/rmo.md) 
