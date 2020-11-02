@@ -20,8 +20,8 @@ func main() {
 
 	configCmd := &cobra.Command{
 		Use:     "cfg",
-		Short:   "Set authentication configurations",
-		Long:    `Set configurations for Minio/S3 Cloud Storage, including endPoint，acessKeyID，secretAccessKey，useSSL`,
+		Short:   "Set Cloud Storage Service authentication configurations",
+		Long:    `Set Cloud Storage Service configurations for Minio/S3 Cloud Storage, including endPoint，acessKeyID，secretAccessKey，useSSL`,
 		Aliases: []string{"config"},
 		Example: `  Mydump2oss cfg --endPoint="x" --accessKeyID="x" --secretAccessKey="x" --useSSL="true"`,
 	}

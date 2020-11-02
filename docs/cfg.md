@@ -1,10 +1,10 @@
 ## cfg
 
-Set authentication configurations
+Set Cloud Storage Service authentication configurations
 
 ### Synopsis
 
-Set configurations for Minio/S3 Cloud Storage, including endPoint，acessKeyID，secretAccessKey，useSSL
+Set Cloud Storage Service configurations for Minio/S3 Cloud Storage, including endPoint，acessKeyID，secretAccessKey，useSSL
 
 ### Examples
 
