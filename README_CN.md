@@ -1,4 +1,4 @@
-﻿# Mydump2oss
+﻿# Mydump2oss [English](README.md)
 
 Mydump2oss 是一个将MySQL数据库备份上传到MinIo，S3，Azure等云存储的工具。具体云服务认证信息可用`cfg`指令设置，或用--config指定保存有云服务认证信息的文件。
 

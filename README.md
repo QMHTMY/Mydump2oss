@@ -1,4 +1,4 @@
-﻿# Mydump2oss
+﻿# Mydump2oss [中文](README_CN.md)
 
 Mydump2oss is a tool to upload local files (like mysql-backups) to MiIo, S3, Azure, Google Cloud Storage. You can set the authentication configurations with `cfg` or use --config to specify the authentication configuration file.
 
