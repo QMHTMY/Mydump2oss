@@ -38,7 +38,8 @@ Using Mydump2oss is easy.
 ##### make or build
 
     cd Mydump2oss/ 
-    make # go build
+    make # or go build
+    make install # make uninstall
 
 ##### Install from .deb
 

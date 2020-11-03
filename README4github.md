@@ -36,6 +36,7 @@ Linux下，使用Mydumper备份mysql等数据库并压缩，接着Mydump2oss工�
 
     cd Mydump2oss/
     make # go build
+    make install # make uninstall
 
 ##### 直接从deb包安装
 
