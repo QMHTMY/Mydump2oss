@@ -29,6 +29,7 @@ func makeBucketRun(cmd *cobra.Command, args []string) {
 	ctx := context.Background()
 	bucketOptions := minio.MakeBucketOptions{Region: "us-east-1", ObjectLocking: true}
 	for _, bucket := range args {
+        bucket = trimSuffix(bucket, "/")
 		if err := client.MakeBucket(ctx, bucket, bucketOptions); err != nil {
 			er(err)
 		} else {

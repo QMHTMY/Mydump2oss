@@ -40,6 +40,7 @@ func removeBucketRun(cmd *cobra.Command, args []string) {
 	client := newClient()
 	ctx := context.Background()
 	for _, bucket := range args {
+        bucket = trimSuffix(bucket, "/")
 		checkBucket(ctx, client, bucket)
 
 		err := client.RemoveBucket(ctx, bucket)

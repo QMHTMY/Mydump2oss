@@ -35,7 +35,7 @@ func mirrorRun(cmd *cobra.Command, args []string) {
 		er(err)
 	}
 
-	bucket := args[1]
+    bucket := trimSuffix(args[1], "/")
 	client := newClient()
 	ctx := context.Background()
 	checkBucket(ctx, client, bucket)

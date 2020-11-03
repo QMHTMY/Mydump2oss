@@ -26,7 +26,7 @@ func copyRun(cmd *cobra.Command, args []string) {
 		er(err)
 	}
 
-	bucket := args[length-1]
+    bucket := trimSuffix(args[length-1], "/")
 	client := newClient()
 	ctx := context.Background()
 	checkBucket(ctx, client, bucket)

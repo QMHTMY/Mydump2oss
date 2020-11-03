@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"os"
 	"strconv"
+	"strings"
 
 	"github.com/minio/minio-go/v7"
 )
@@ -81,4 +82,12 @@ func mkConfigFile(path, file string) {
 	defer fp.Close()
 
 	fmt.Println("Config file created: " + path + file)
+}
+
+// 去除bucket的suffix "/"
+func trimSuffix(bucket, suffix string) string {
+    if strings.HasSuffix(bucket, suffix) {
+        bucket = strings.TrimSuffix(bucket, suffix)
+    }
+    return bucket
 }
