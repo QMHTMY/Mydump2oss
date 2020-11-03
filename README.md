@@ -74,7 +74,7 @@ Download the latest release deb-package from [releases](https://github.com/QMHTM
 
 
 
-    shieber@Kew:Mydump2oss 🐁 Mydump2oss cp --help
+    shieber@Kew:files 🐁 Mydump2oss cp --help
     Copy local objects to a remote bucket on MinIo/S3 Cloud Storage
 
     Usage:

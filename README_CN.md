@@ -47,15 +47,7 @@ Linux下，使用Mydumper备份mysql等数据库并压缩，接着Mydump2oss工�
 
 ## 使用
     
-    shieber@Kew:files 🐁  Mydump2oss --help
-    Mydump2oss, a tool to upload files to MinIo/S3... Cloud Storage
-
-    Usage:
-      Mydump2oss [command]
-
-    Available Commands:
-
-    shieber@Kew:files 🐁  Mydump2oss --help
+    shieber@Kew:files 🐁  Mydump2oss --help       #全局帮助信息
     Mydump2oss, a tool to upload files to MinIo/S3... Cloud Storage
 
     Usage:
@@ -80,7 +72,7 @@ Linux下，使用Mydumper备份mysql等数据库并压缩，接着Mydump2oss工�
 
 
 
-    shieber@Kew:Mydump2oss 🐁 Mydump2oss cp --help
+    shieber@Kew:files 🐁  Mydump2oss cp --help    #cp命令帮助信息
     Copy local objects to a remote bucket on MinIo/S3 Cloud Storage
 
     Usage:
@@ -90,7 +82,7 @@ Linux下，使用Mydumper备份mysql等数据库并压缩，接着Mydump2oss工�
       cp, copy, upload
 
     Examples:
-      Mydump2oss cp file.sql mysql_backup
+      Mydump2oss cp f1.sql f2.sql mysql_backup/
 
     Flags:
       -h, --help   help for cp
