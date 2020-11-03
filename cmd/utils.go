@@ -43,7 +43,7 @@ func er(msg interface{}) {
 }
 
 // 检测MinIo/S3等云服务上的文件桶是否存在
-func checkBucket(ctx context.Context, client *minio.Client, bucket string) {
+func checkBucket(client *minio.Client, ctx context.Context, bucket string) {
 	exist, err := client.BucketExists(ctx, bucket)
 	if err != nil {
 		er(err)

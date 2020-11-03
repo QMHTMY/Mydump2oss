@@ -5,12 +5,17 @@ import (
 	"errors"
 	"fmt"
 	"path/filepath"
+	"sync"
 
 	"github.com/minio/minio-go/v7"
 	"github.com/spf13/cobra"
 )
 
 var (
+	// 等待组
+	wgrmb sync.WaitGroup
+	wgrmo sync.WaitGroup
+
 	// rmb删除云端的文件桶
 	removeBucketCmd = &cobra.Command{
 		Use:     "rmb bucket(s) ...",
@@ -40,14 +45,23 @@ func removeBucketRun(cmd *cobra.Command, args []string) {
 	client := newClient()
 	ctx := context.Background()
 	for _, bucket := range args {
-		bucket = trimSuffix(bucket, "/")
-		checkBucket(ctx, client, bucket)
+		wgrmb.Add(1)
+		go removeBucket(client, ctx, bucket)
+	}
+	wgrmb.Wait()
+}
 
-		err := client.RemoveBucket(ctx, bucket)
-		if err != nil {
-			er(err)
-		}
-		fmt.Println("Successfully removed bucket:", bucket)
+func removeBucket(client *minio.Client, ctx context.Context, bucket string) {
+	defer wgrmb.Done()
+
+	bucket = trimSuffix(bucket, "/")
+	checkBucket(client, ctx, bucket)
+
+	err := client.RemoveBucket(ctx, bucket)
+	if err != nil {
+		fmt.Println(err)
+	} else {
+		fmt.Println("Successfully deleted bucket:", bucket)
 	}
 }
 
@@ -58,16 +72,26 @@ func removeObjectRun(cmd *cobra.Command, args []string) {
 
 	client := newClient()
 	ctx := context.Background()
-	opts := minio.RemoveObjectOptions{GovernanceBypass: true}
-	for _, path2obj := range args {
-		bucket := filepath.Dir(path2obj)
-		obj := filepath.Base(path2obj)
-		checkBucket(ctx, client, bucket)
 
-		err := client.RemoveObject(ctx, bucket, obj, opts)
-		if err != nil {
-			fmt.Println(err)
-		}
-		fmt.Println("Successfully removed object:", obj)
+	for _, path2obj := range args {
+		wgrmo.Add(1)
+		go removeObject(client, ctx, path2obj)
+	}
+	wgrmo.Wait()
+}
+
+func removeObject(client *minio.Client, ctx context.Context, path2obj string) {
+	defer wgrmo.Done()
+
+	bucket := filepath.Dir(path2obj)
+	checkBucket(client, ctx, bucket)
+
+	obj := filepath.Base(path2obj)
+	opts := minio.RemoveObjectOptions{GovernanceBypass: true}
+	err := client.RemoveObject(ctx, bucket, obj, opts)
+	if err != nil {
+		fmt.Println(err)
+	} else {
+		fmt.Println("Successfully deleted object:", obj)
 	}
 }

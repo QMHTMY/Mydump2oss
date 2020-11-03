@@ -6,20 +6,26 @@ import (
 	"fmt"
 	"io/ioutil"
 	"os"
+	"sync"
 
 	"github.com/minio/minio-go/v7"
 	"github.com/spf13/cobra"
 )
 
-// 同步本地目录下所有文件到云端
-var mirrorCmd = &cobra.Command{
-	Use:     "mr localDir/ bucket/",
-	Short:   "Synchronize local objects to a remote bucket",
-	Long:    "Synchronize local objects to a remote bucket on MinIo/S3 Cloud Storage",
-	Aliases: []string{"mirror"},
-	Example: "  Mydump2oss mr sql_bkp/ sql_bucket/",
-	Run:     mirrorRun,
-}
+var (
+	// 等待组
+	wgmr sync.WaitGroup
+
+	// 同步本地目录下所有文件到云端
+	mirrorCmd = &cobra.Command{
+		Use:     "mr localDir/ bucket/",
+		Short:   "Synchronize local objects to a remote bucket",
+		Long:    "Synchronize local objects to a remote bucket on MinIo/S3 Cloud Storage",
+		Aliases: []string{"mirror"},
+		Example: "  Mydump2oss mr sql_bkp/ sql_bucket/",
+		Run:     mirrorRun,
+	}
+)
 
 func mirrorRun(cmd *cobra.Command, args []string) {
 	if len(args) < 2 {
@@ -34,34 +40,40 @@ func mirrorRun(cmd *cobra.Command, args []string) {
 		er(err)
 	}
 
-	// 获取client
-	bucket := trimSuffix(args[1], separator)
+	// 获取client并检查bucket
 	client := newClient()
 	ctx := context.Background()
-	checkBucket(ctx, client, bucket)
+	bucket := trimSuffix(args[1], separator)
+	checkBucket(client, ctx, bucket)
 
 	// 遍历并上传文件，若上传成功则删除本地文件
-	fmt.Printf("Starting synchronize %s to bucket:%s\n", localDir, bucket)
-	putObjOptions := minio.PutObjectOptions{ContentType: "application/octet-stream"}
+	fmt.Printf("Starting synchronize %s to bucket: %s\n", localDir, bucket)
+	prePath := localDir + separator
 	for _, file := range reader {
 		if file.IsDir() {
-			// 不递归上传子路径的内容
-			continue
+			continue // 不递归上传子路径的内容
 		}
+		wgmr.Add(1)
+		go putObject(client, ctx, prePath, file, bucket)
+	}
+	wgmr.Wait()
+}
 
-		filePath := localDir + separator + file.Name()
-		_, err := client.FPutObject(ctx, bucket, file.Name(), filePath, putObjOptions)
-		if err != nil {
+func putObject(client *minio.Client, ctx context.Context, pathStr string, file os.FileInfo, bucket string) {
+	defer wgmr.Done()
+
+	filePath := pathStr + file.Name()
+
+	putObjOptions := minio.PutObjectOptions{ContentType: "application/octet-stream"}
+	_, err := client.FPutObject(ctx, bucket, file.Name(), filePath, putObjOptions)
+	if err != nil {
+		er(err)
+	} else {
+		fmt.Println("Successfully uploaded object:", filePath)
+		if err := os.Remove(filePath); err != nil { // 上传后删除本地文件，节约空间
 			er(err)
 		} else {
-			fmt.Println("Successfully uploaded object:", filePath)
-
-			// 上传后删除本地文件，节约空间
-			if err := os.Remove(filePath); err != nil {
-				er(err)
-			} else {
-				fmt.Println("Successfully deleted object:", filePath)
-			}
+			fmt.Println("Successfully deleted object:", filePath)
 		}
 	}
 }

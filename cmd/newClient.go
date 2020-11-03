@@ -12,15 +12,12 @@ import (
 // 获取配置文件名
 func getCurConfig() string {
 	curConfig := viper.GetString("config")
-
-	if curConfig != "" {
-		// 若通过--config指定配置文件位置，则判断是否存在
+	if curConfig != "" { // 若通过--config指定配置文件位置，则判断是否存在
 		if !fileExist(curConfig) {
 			err := errors.New("Config file does not exist")
 			er(err)
 		}
-	} else {
-		// 否则使用默认值
+	} else { // 否则使用默认值
 		curConfig = configPath + fileName
 	}
 

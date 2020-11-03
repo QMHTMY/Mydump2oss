@@ -26,10 +26,11 @@ func listRun(cmd *cobra.Command, args []string) {
 
 	client := newClient()
 	ctx := context.Background()
+
 	listObjectsOptions := minio.ListObjectsOptions{Prefix: "", Recursive: true}
 	for _, bucket := range args {
 		bucket = trimSuffix(bucket, "/")
-		checkBucket(ctx, client, bucket)
+		checkBucket(client, ctx, bucket)
 
 		objCh := client.ListObjects(ctx, bucket, listObjectsOptions)
 		for obj := range objCh {

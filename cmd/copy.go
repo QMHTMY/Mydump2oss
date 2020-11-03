@@ -5,20 +5,26 @@ import (
 	"errors"
 	"fmt"
 	"path/filepath"
+	"sync"
 
 	"github.com/minio/minio-go/v7"
 	"github.com/spf13/cobra"
 )
 
-// 上传本地文件到云端
-var copyCmd = &cobra.Command{
-	Use:     "cp obj(s) ... bucket",
-	Short:   "Copy local objects to a remote bucket",
-	Long:    "Copy local objects to a remote bucket on MinIo/S3 Cloud Storage",
-	Aliases: []string{"copy", "upload"},
-	Example: "  Mydump2oss cp file.sql mysql_backup/",
-	Run:     copyRun,
-}
+var (
+	// 等待组
+	wgcp sync.WaitGroup
+
+	// 上传本地文件到云端
+	copyCmd = &cobra.Command{
+		Use:     "cp object(s) ... bucket",
+		Short:   "Copy local objects to a remote bucket",
+		Long:    "Copy local objects to a remote bucket on MinIo/S3 Cloud Storage",
+		Aliases: []string{"copy", "upload"},
+		Example: "  Mydump2oss cp f1.sql f2.sql mysql_backup/",
+		Run:     copyRun,
+	}
+)
 
 func copyRun(cmd *cobra.Command, args []string) {
 	length := len(args)
@@ -26,20 +32,28 @@ func copyRun(cmd *cobra.Command, args []string) {
 		er(errors.New(cpUsage))
 	}
 
-	bucket := trimSuffix(args[length-1], "/")
 	client := newClient()
 	ctx := context.Background()
-	checkBucket(ctx, client, bucket)
+	bucket := trimSuffix(args[length-1], "/")
+	checkBucket(client, ctx, bucket)
+
+	for _, obj := range args[:length-1] {
+		wgcp.Add(1)
+		go cpObj(client, ctx, bucket, obj)
+	}
+	wgcp.Wait()
+}
+
+func cpObj(client *minio.Client, ctx context.Context, bucket, object string) {
+	defer wgcp.Done()
+
+	fileName := filepath.Base(object)
 
 	putObjectOptions := minio.PutObjectOptions{ContentType: "application/octet-stream"}
-	for _, obj := range args[:length-1] {
-		fileName := filepath.Base(obj)
-
-		_, err := client.FPutObject(ctx, bucket, fileName, obj, putObjectOptions)
-		if err != nil {
-			er(err)
-		} else {
-			fmt.Println("Successfully uploaded object:", fileName)
-		}
+	_, err := client.FPutObject(ctx, bucket, fileName, object, putObjectOptions)
+	if err != nil {
+		er(err)
+	} else {
+		fmt.Println("Successfully uploaded object:", fileName)
 	}
 }
