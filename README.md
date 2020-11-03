@@ -1,21 +1,21 @@
-﻿# Mydump2oss [中文](README_CN.md)
+﻿# Mydump2oss [中文](README4github.md)
 
 Mydump2oss is a tool to upload local files (like mysql-backups) to MiIo, S3, Azure, Google Cloud Storage. You can set the authentication configurations with `cfg` or use --config to specify the authentication configuration file.
 
-## Features
+Mydump2oss provides:
 
 * upload files to multiple Cloud Storage
 * upload files with little memory-space occupied
 
-## Prerequisites
+
+Mydump2oss's prerequisites:
 
 * local files like mysql-backups
 * MinIo，S3，Azure Cloud Storage Service
 
-## Description 
-On linux, use other tools (like Mydumper) to prepare files, then upload files to Cloud Storage. Also, you can use linux crontab to run this work periodically.
+On linux, use other tools (like Mydumper) to prepare files, then upload files to Cloud Storage. Also, you can use crontab job to run this work periodically.
 
-## Work flow
+Data flow:
 
 <!--                     +------------+                                            
      +------+  data  |  Mydumper  | data.gz  +------------+ data.gz  +----------------+   
@@ -24,6 +24,27 @@ On linux, use other tools (like Mydumper) to prepare files, then upload files to
 -->
 
 ![flow](README.png)
+
+## Installation
+Using Mydump2oss is easy.
+
+##### get the repo
+
+    three ways to get src repo.
+    1.git clone git@github.com/QMHTMY/Mydump2oss.git
+    2.go get -u github.com/QMHTMY/Mydump2oss
+    3.gh repo clone QMHTMY/Mydump2oss
+
+##### make or build
+
+    cd Mydump2oss/ 
+    make # go build
+
+##### Install from .deb
+
+Download the latest release deb-package from [releases](https://github.com/QMHTMY/Mydump2oss/releases) 
+
+    sudo dpkg -i Mydump2oss_x.x_linux_amd64.deb
 
 ## Usage
     
@@ -71,7 +92,7 @@ On linux, use other tools (like Mydumper) to prepare files, then upload files to
           --config string   Config file to store Cloud Storage Authentication Info.
 
 
-## Detaild cmd usages
+## Detailed usage
 [cfg](docs/cfg.md)
 [cp](docs/cp.md)
 [ls](docs/ls.md)
@@ -79,17 +100,3 @@ On linux, use other tools (like Mydumper) to prepare files, then upload files to
 [mr](docs/mr.md)
 [rmb](docs/rmb.md)
 [rmo](docs/rmo.md)
-
-
-## Code statistics
-
-    -------------------------------------------------------------------------------
-    Language                     files          blank        comment           code
-    -------------------------------------------------------------------------------
-    Go                                14             104              26             612
-    Markdown                      10             112               0             212
-    make                             1              13               3              38
-    JSON                             1               0               0               1
-    -------------------------------------------------------------------------------
-    SUM:                            26            229             29            863
-    -------------------------------------------------------------------------------

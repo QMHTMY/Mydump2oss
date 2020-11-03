@@ -1,21 +1,18 @@
-﻿# Mydump2oss [English](README.md)
+﻿# Mydump2oss
 
 Mydump2oss 是一个将MySQL数据库备份上传到MinIo，S3，Azure等云存储的工具。具体云服务认证信息可用`cfg`指令设置，或用--config指定保存有云服务认证信息的文件。
 
-## 功能 
+Mydump2oss支持：
 
 * 上传备份文件到云对象存储
 * 支持本地盘空间较小的情况下一次性上传(非分批)
 
-## 前提
+使用前Mydump2oss需要：
 
-* mydumper 导出的数据库备份
+* mydumper等工具导出的数据库备份
 * MinIo，S3，Azure等云存储服务
 
-## 说明
 Linux下，使用Mydumper备份mysql等数据库并压缩，接着Mydump2oss工具将压缩后的备份文件上传到MinIo，S3，Azure等的云对象存储中。可使用crontab定制job，定时备份数据库到云存储。
-
-## 工作流
 
 <!--                     +------------+                                            
      +------+  data  |  Mydumper  | data.gz  +------------+ data.gz  +----------------+   
@@ -25,8 +22,37 @@ Linux下，使用Mydumper备份mysql等数据库并压缩，接着Mydump2oss工�
 
 ![flow](README.png)
 
-## 用法
+## 安装
+
+可从源码或deb包安装Mydump2oss。
+
+##### 获取源码
+    三种方式获取 
+    1.git clone git@gitee.com/QMHTMY/mydump2oss.git
+    2.git clone https://gitee.com/QMHTMY/mydump2oss.git
+    3.下载zip包再解压
+
+##### make 或 build
+
+    cd mydump2oss
+    make # go build
+
+##### 直接从deb包安装
+
+从[releases](https://gitee.com/QMHTMY/mydump2oss/releases)下载最新版deb包，然后安装 
+
+    sudo dpkg -i Mydump2oss_x.x_linux_amd64.deb
+
+## 使用
     
+    shieber@Kew:files 🐁  Mydump2oss --help
+    Mydump2oss, a tool to upload files to MinIo/S3... Cloud Storage
+
+    Usage:
+      Mydump2oss [command]
+
+    Available Commands:
+
     shieber@Kew:files 🐁  Mydump2oss --help
     Mydump2oss, a tool to upload files to MinIo/S3... Cloud Storage
 
@@ -79,16 +105,3 @@ Linux下，使用Mydumper备份mysql等数据库并压缩，接着Mydump2oss工�
 [mr](docs/mr.md) 
 [rmb](docs/rmb.md) 
 [rmo](docs/rmo.md) 
-
-## 代码统计
-
-    -------------------------------------------------------------------------------
-    Language                     files          blank        comment           code
-    -------------------------------------------------------------------------------
-    Go                              14            104             26            612
-    Markdown                        10            112              0            212
-    make                             1             13              3             38
-    JSON                             1              0              0              1
-    -------------------------------------------------------------------------------
-    SUM:                            26            229             29            863
-    -------------------------------------------------------------------------------
