@@ -13,6 +13,8 @@ INSTALLDIR="/usr/bin"
 GENMKDPAGE="docs/mkdPage.go"
 
 #Make work flow
+.PHONY: vet test fmt bin build docs install uninstall clean
+
 default: all
 
 all: vet test fmt bin build docs
@@ -31,14 +33,14 @@ fmt:
 
 bin: 
 	$(info ******************** make dir ********************)
-	mkdir $(BIN)
+	mkdir -p $(BIN)
 
 build:
 	$(info ******************** building ********************)
 	$(GOBUILD) -o $(BIN)/$(OBJECT)
 
 docs:
-	$(info ******************** generating markdown page ********************)
+	$(info ******************** generating Markdown page ********************)
 	$(GORUN) $(GENMKDPAGE) 
 
 install:
@@ -50,5 +52,3 @@ uninstall:
 
 clean:
 	rm -rf $(BIN)
-
-.PHONY: bin fmt vet test build docs install uninstall clean
