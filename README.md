@@ -2,16 +2,16 @@
 
 Mydump2oss is a tool to upload local files (like mysql-backups) to MinIo, S3, Azure, Google Cloud Storage. You can set the authentication configurations with `cfg` or use --config to specify the authentication configuration file.
 
+Mydump2oss's prerequisites:
+
+* local files like mysql-backups
+* MinIo，S3，Azure Cloud Storage Service
+
 Mydump2oss provides:
 
 - [x] upload files concurrently
 - [x] customizable Cloud Storage
 - [ ] upload files with small memory-space occupied 
-
-Mydump2oss's prerequisites:
-
-* local files like mysql-backups
-* MinIo，S3，Azure Cloud Storage Service
 
 On linux, use other tools (like Mydumper) to prepare files, then upload files to Cloud Storage. Also, you can use crontab job to run this work periodically.
 

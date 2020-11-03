@@ -2,16 +2,16 @@
 
 Mydump2oss 是一个将MySQL数据库备份上传到MinIo，S3，Azure等云存储的工具。具体云服务认证信息可用`cfg`指令设置，或用--config指定保存有云服务认证信息的文件。
 
+使用前Mydump2oss需要：
+
+* mydumper等工具导出的数据库备份
+* MinIo，S3，Azure等云存储服务
+
 Mydump2oss支持：
 
 - [x] 并行上传备份文件
 - [x] 可自定义云存储服务商
 - [ ] 支持本地盘空间较小的情况下一次性上传(非分批) [待更新...]
-
-使用前Mydump2oss需要：
-
-* mydumper等工具导出的数据库备份
-* MinIo，S3，Azure等云存储服务
 
 Linux下，使用Mydumper备份mysql等数据库并压缩，接着Mydump2oss工具将压缩后的备份文件上传到MinIo，S3，Azure等的云对象存储中。可使用crontab定制job，定时备份数据库到云存储。
 
