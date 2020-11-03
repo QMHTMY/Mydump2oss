@@ -10,23 +10,23 @@ import (
 	"github.com/spf13/cobra"
 )
 
+// 上传本地文件到云端
 var copyCmd = &cobra.Command{
 	Use:     "cp obj(s) ... bucket",
 	Short:   "Copy local objects to a remote bucket",
 	Long:    "Copy local objects to a remote bucket on MinIo/S3 Cloud Storage",
 	Aliases: []string{"copy", "upload"},
-	Example: "  Mydump2oss cp file.sql mysql_backup",
+	Example: "  Mydump2oss cp file.sql mysql_backup/",
 	Run:     copyRun,
 }
 
 func copyRun(cmd *cobra.Command, args []string) {
 	length := len(args)
 	if length < 2 {
-		err := errors.New("Usage: Mydump2oss cp object1... bucket")
-		er(err)
+		er(errors.New(cpUsage))
 	}
 
-    bucket := trimSuffix(args[length-1], "/")
+	bucket := trimSuffix(args[length-1], "/")
 	client := newClient()
 	ctx := context.Background()
 	checkBucket(ctx, client, bucket)

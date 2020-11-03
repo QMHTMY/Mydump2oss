@@ -9,21 +9,25 @@ import (
 	"github.com/spf13/viper"
 )
 
+// 获取配置文件名
 func getCurConfig() string {
 	curConfig := viper.GetString("config")
 
-	if curConfig != "" { // 若通过--config指定配置文件位置，则判断是否存在
+	if curConfig != "" {
+		// 若通过--config指定配置文件位置，则判断是否存在
 		if !fileExist(curConfig) {
 			err := errors.New("Config file does not exist")
 			er(err)
 		}
-	} else { // 否则使用默认值
+	} else {
+		// 否则使用默认值
 		curConfig = configPath + fileName
 	}
 
 	return curConfig
 }
 
+// 构造client
 func newClient() *minio.Client {
 	// 获取配置信息
 	curConfig := getCurConfig()
@@ -31,12 +35,13 @@ func newClient() *minio.Client {
 	if err != nil {
 		er(err)
 	}
+
 	endPoint = item.EndPoint
 	accessKeyID = item.AccessKeyID
 	secretAccessKey = item.SecretAccessKey
 	useSSL = item.UseSSL
 
-	// 通过配置信息构造并返回minio对象存储的client
+	// 通过配置信息构造并返回对象存储的client
 	client, err := minio.New(
 		endPoint,
 		&minio.Options{

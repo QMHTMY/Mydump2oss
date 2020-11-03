@@ -5,7 +5,7 @@ import (
 	"io/ioutil"
 )
 
-// minio/S3 Cloud Storage的认证信息
+// MinIo/S3 Cloud Storage的认证信息
 type Item struct {
 	EndPoint        string
 	AccessKeyID     string
@@ -13,6 +13,7 @@ type Item struct {
 	UseSSL          bool
 }
 
+// 保存Item为json文件
 func WriteItem(filename string, item Item) error {
 	b, err := json.Marshal(item)
 	if err != nil {
@@ -27,6 +28,7 @@ func WriteItem(filename string, item Item) error {
 	return nil
 }
 
+// 读取json文件并转换为Item
 func ReadItem(filename string) (Item, error) {
 	b, err := ioutil.ReadFile(filename)
 	if err != nil {

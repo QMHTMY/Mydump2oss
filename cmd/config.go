@@ -7,29 +7,20 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var (
-	// 配置参数
-	endPoint        string
-	accessKeyID     string
-	secretAccessKey string
-	useSSL          bool
-
-	// cfg命令
-	configCmd = &cobra.Command{
-		Use:     "cfg",
-		Short:   "Set authentication configurations",
-		Long:    `Set configurations for Minio/S3 Cloud Storage, including endPoint，acessKeyID，secretAccessKey，useSSL`,
-		Aliases: []string{"config"},
-		Example: `  Mydump2oss cfg --endPoint="x" --accessKeyID="x" --secretAccessKey="x" --useSSL="true"`,
-		Run:     configRun,
-	}
-)
+// cfg命令，配置云存储服务的认证信息
+var configCmd = &cobra.Command{
+	Use:     "cfg",
+	Short:   "Set authentication configurations",
+	Long:    `Set configurations for Minio/S3 Cloud Storage, including endPoint，acessKeyID，secretAccessKey，useSSL`,
+	Aliases: []string{"config"},
+	Example: `  Mydump2oss cfg --endPoint="x" --accessKeyID="x" --secretAccessKey="x" --useSSL="true"`,
+	Run:     configRun,
+}
 
 func configRun(cmd *cobra.Command, args []string) {
 	if endPoint == "" || accessKeyID == "" || secretAccessKey == "" {
-		if len(args) < 4 {
-			err := errors.New(`Usage: Mydump2oss cfg --endPoint="xx" --accessKeyID="xx" --secretAccessKey="xx" --useSSL="true"`)
-			er(err)
+		if len(args) != 4 {
+			er(errors.New(cfgUsage))
 		} else {
 			endPoint = args[0]
 			accessKeyID = args[1]
@@ -52,6 +43,7 @@ func configRun(cmd *cobra.Command, args []string) {
 	}
 }
 
+// 配置参数
 func init() {
 	configCmd.Flags().StringVar(&endPoint, "endPoint", "", "oss storage endpoint")
 	configCmd.Flags().StringVar(&accessKeyID, "accessKeyID", "", "login id")

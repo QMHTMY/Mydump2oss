@@ -10,11 +10,6 @@ import (
 )
 
 var (
-	configPath string                                                     // 配置文件路径
-	fileName   string                                                     // 配置文件名
-	cfgFile    string                                                     // 指定配置文件的flag参数
-	version    = "v0.1\nGolang version v1.15\nCopyright (c) 2020 Shieber" // 版本信息
-
 	// 全局主命令Mydump2oss
 	RootCmd = &cobra.Command{
 		Use:     "Mydump2oss",
@@ -49,7 +44,7 @@ func init() {
 		&cfgFile,
 		"config",
 		"",
-		"Config file to store Cloud Storage Authentication Info.",
+		"Config file to store authentication info, defauls to $HOME/.Mydump2oss/config.json",
 	)
 }
 

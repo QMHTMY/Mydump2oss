@@ -11,15 +11,6 @@ import (
 	"github.com/minio/minio-go/v7"
 )
 
-// 常量，文件大小单位K/M/G/T
-const (
-	_ = iota
-	K = 1 << (iota * 10)
-	M = 1 << (iota * 10)
-	G = 1 << (iota * 10)
-	T = 1 << (iota * 10)
-)
-
 // 将文件大小转化为对应单位B/K/M/G/T
 func size2string(size float64) string {
 	unit := ""
@@ -51,7 +42,7 @@ func er(msg interface{}) {
 	os.Exit(-1)
 }
 
-// 检测minio/S3等云端上的文件桶是否存在
+// 检测MinIo/S3等云服务上的文件桶是否存在
 func checkBucket(ctx context.Context, client *minio.Client, bucket string) {
 	exist, err := client.BucketExists(ctx, bucket)
 	if err != nil {
@@ -68,26 +59,31 @@ func fileExist(file string) bool {
 	return err == nil || os.IsExist(err)
 }
 
-// 创建新配置文件
+// 创建新文件
+func mkNewFile(file string) {
+	fp, err := os.Create(file)
+	if err != nil {
+		er(err)
+	}
+	defer fp.Close()
+
+	fmt.Println("Successfully created file:", file)
+}
+
+// 在指定位置path处创建新配置文件
 func mkConfigFile(path, file string) {
 	err := os.MkdirAll(path, 0766)
 	if err != nil {
 		er(err)
 	}
 
-	fp, err := os.Create(path + file)
-	if err != nil {
-		er(err)
-	}
-	defer fp.Close()
-
-	fmt.Println("Config file created: " + path + file)
+	mkNewFile(path + file)
 }
 
-// 去除bucket的suffix "/"
-func trimSuffix(bucket, suffix string) string {
-    if strings.HasSuffix(bucket, suffix) {
-        bucket = strings.TrimSuffix(bucket, suffix)
-    }
-    return bucket
+// 去除字符串中的suffix "/"
+func trimSuffix(str, suffix string) string {
+	if strings.HasSuffix(str, suffix) {
+		str = strings.TrimSuffix(str, suffix)
+	}
+	return str
 }

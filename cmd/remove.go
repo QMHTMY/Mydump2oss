@@ -10,37 +10,37 @@ import (
 	"github.com/spf13/cobra"
 )
 
-// rmb删除桶   使用方式 Mydump2oss rmb bucket1 bucket2 ...
-// rmo删除对象 使用方式 Mydump2oss rmo bucket1/obj1 bucket2/obj2 ...
 var (
+	// rmb删除云端的文件桶
 	removeBucketCmd = &cobra.Command{
 		Use:     "rmb bucket(s) ...",
 		Short:   "Remove remote bucket(s)",
 		Long:    "Remove remote bucket(s) on MinIo/S3 Cloud Storage",
 		Aliases: []string{"rmbucket", "removebucket"},
-		Example: "  Mydump2oss rmb sql_bucket code_bucket",
+		Example: "  Mydump2oss rmb sql_bucket/ code_bucket/",
 		Run:     removeBucketRun,
 	}
+
+	// rmo删除云端文件桶中文件
 	removeObjectCmd = &cobra.Command{
 		Use:     "rmo bucket/objs ...",
 		Short:   "Remove remote object(s)",
 		Long:    "Remove remote object(s) on MinIo/S3 Cloud Storage",
 		Aliases: []string{"rm", "rmobject", "removeobject"},
-		Example: "  Mydump2oss rmo sql_bucket/org.sql.gz",
+		Example: "  Mydump2oss rmo mysql/data.sql code/src.gz",
 		Run:     removeObjectRun,
 	}
 )
 
 func removeBucketRun(cmd *cobra.Command, args []string) {
 	if len(args) < 1 {
-		err := errors.New("Usage: Mydump2oss rmb bucket(s) ...")
-		er(err)
+		er(errors.New(rmbUsage))
 	}
 
 	client := newClient()
 	ctx := context.Background()
 	for _, bucket := range args {
-        bucket = trimSuffix(bucket, "/")
+		bucket = trimSuffix(bucket, "/")
 		checkBucket(ctx, client, bucket)
 
 		err := client.RemoveBucket(ctx, bucket)
@@ -53,8 +53,7 @@ func removeBucketRun(cmd *cobra.Command, args []string) {
 
 func removeObjectRun(cmd *cobra.Command, args []string) {
 	if len(args) < 1 {
-		err := errors.New("Usage: Mydump2oss rmo bucket/objects ...")
-		er(err)
+		er(errors.New(rmoUsage))
 	}
 
 	client := newClient()
