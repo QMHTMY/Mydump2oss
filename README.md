@@ -49,6 +49,8 @@ Download the latest release deb-package from [releases](https://github.com/QMHTM
 
 ## Usage
     
+![help](help.gif)
+
     shieber@Kew:files 🐁  Mydump2oss --help
     Mydump2oss, a tool to upload files to MinIo/S3... Cloud Storage
 
@@ -71,27 +73,6 @@ Download the latest release deb-package from [releases](https://github.com/QMHTM
       -v, --version         version for Mydump2oss
 
     Use "Mydump2oss [command] --help" for more information about a command.
-
-
-
-    shieber@Kew:files 🐁 Mydump2oss cp --help
-    Copy local objects to a remote bucket on MinIo/S3 Cloud Storage
-
-    Usage:
-      Mydump2oss cp obj(s) ... bucket [flags]
-
-    Aliases:
-      cp, copy, upload
-
-    Examples:
-      Mydump2oss cp file.sql mysql_backup
-
-    Flags:
-      -h, --help   help for cp
-
-    Global Flags:
-          --config string   Config file to store Cloud Storage Authentication Info.
-
 
 ## Detailed usage
 [cfg](docs/cfg.md)
